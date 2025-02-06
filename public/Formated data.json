@@ -1,0 +1,1030 @@
+{
+    "genre_checkouts": [
+      {
+        "book__genre": "Biography",
+        "checkout_count": 21
+      },
+      {
+        "book__genre": "Fantasy",
+        "checkout_count": 21
+      },
+      {
+        "book__genre": "Fiction",
+        "checkout_count": 12
+      },
+      {
+        "book__genre": "History",
+        "checkout_count": 10
+      },
+      {
+        "book__genre": "Mystery",
+        "checkout_count": 15
+      },
+      {
+        "book__genre": "Non-Fiction",
+        "checkout_count": 11
+      },
+      {
+        "book__genre": "Programming",
+        "checkout_count": 17
+      },
+      {
+        "book__genre": "Romance",
+        "checkout_count": 25
+      },
+      {
+        "book__genre": "Science",
+        "checkout_count": 1
+      },
+      {
+        "book__genre": "Technology",
+        "checkout_count": 17
+      }
+    ],
+    
+    
+    
+    "genre_popularity": [
+      {
+        "book__genre": "Romance",
+        "total_checkouts": 25
+      },
+      {
+        "book__genre": "Fantasy",
+        "total_checkouts": 21
+      },
+      {
+        "book__genre": "Biography",
+        "total_checkouts": 21
+      },
+      {
+        "book__genre": "Technology",
+        "total_checkouts": 17
+      },
+      {
+        "book__genre": "Programming",
+        "total_checkouts": 17
+      },
+      {
+        "book__genre": "Mystery",
+        "total_checkouts": 15
+      },
+      {
+        "book__genre": "Fiction",
+        "total_checkouts": 12
+      },
+      {
+        "book__genre": "Non-Fiction",
+        "total_checkouts": 11
+      },
+      {
+        "book__genre": "History",
+        "total_checkouts": 10
+      },
+      {
+        "book__genre": "Science",
+        "total_checkouts": 1
+      }
+    ],
+    
+    
+    
+    "daily_checkouts": [
+      {
+        "date": "2024-02-05",
+        "count": 1
+      },
+      {
+        "date": "2024-02-11",
+        "count": 1
+      },
+      {
+        "date": "2024-02-16",
+        "count": 1
+      },
+      {
+        "date": "2024-02-18",
+        "count": 1
+      },
+      {
+        "date": "2024-02-19",
+        "count": 1
+      },
+      {
+        "date": "2024-02-22",
+        "count": 1
+      },
+      {
+        "date": "2024-02-23",
+        "count": 1
+      },
+      {
+        "date": "2024-02-24",
+        "count": 1
+      },
+      {
+        "date": "2024-03-02",
+        "count": 2
+      },
+      {
+        "date": "2024-03-04",
+        "count": 1
+      },
+      {
+        "date": "2024-03-05",
+        "count": 1
+      },
+      {
+        "date": "2024-03-07",
+        "count": 1
+      },
+      {
+        "date": "2024-03-09",
+        "count": 1
+      },
+      {
+        "date": "2024-03-10",
+        "count": 1
+      },
+      {
+        "date": "2024-03-15",
+        "count": 1
+      },
+      {
+        "date": "2024-03-18",
+        "count": 1
+      },
+      {
+        "date": "2024-03-19",
+        "count": 1
+      },
+      {
+        "date": "2024-03-20",
+        "count": 1
+      },
+      {
+        "date": "2024-03-27",
+        "count": 2
+      },
+      {
+        "date": "2024-03-28",
+        "count": 1
+      },
+      {
+        "date": "2024-03-31",
+        "count": 1
+      },
+      {
+        "date": "2024-04-04",
+        "count": 1
+      },
+      {
+        "date": "2024-04-15",
+        "count": 1
+      },
+      {
+        "date": "2024-04-16",
+        "count": 1
+      },
+      {
+        "date": "2024-04-20",
+        "count": 1
+      },
+      {
+        "date": "2024-04-26",
+        "count": 1
+      },
+      {
+        "date": "2024-04-29",
+        "count": 1
+      },
+      {
+        "date": "2024-04-30",
+        "count": 2
+      },
+      {
+        "date": "2024-05-10",
+        "count": 1
+      },
+      {
+        "date": "2024-05-18",
+        "count": 1
+      },
+      {
+        "date": "2024-05-20",
+        "count": 2
+      },
+      {
+        "date": "2024-05-23",
+        "count": 1
+      },
+      {
+        "date": "2024-05-24",
+        "count": 1
+      },
+      {
+        "date": "2024-05-28",
+        "count": 1
+      },
+      {
+        "date": "2024-05-29",
+        "count": 1
+      },
+      {
+        "date": "2024-05-30",
+        "count": 2
+      },
+      {
+        "date": "2024-05-31",
+        "count": 1
+      },
+      {
+        "date": "2024-06-02",
+        "count": 1
+      },
+      {
+        "date": "2024-06-03",
+        "count": 1
+      },
+      {
+        "date": "2024-06-04",
+        "count": 1
+      },
+      {
+        "date": "2024-06-08",
+        "count": 1
+      },
+      {
+        "date": "2024-06-10",
+        "count": 1
+      },
+      {
+        "date": "2024-06-15",
+        "count": 1
+      },
+      {
+        "date": "2024-06-16",
+        "count": 1
+      },
+      {
+        "date": "2024-06-18",
+        "count": 2
+      },
+      {
+        "date": "2024-06-22",
+        "count": 2
+      },
+      {
+        "date": "2024-06-25",
+        "count": 1
+      },
+      {
+        "date": "2024-06-26",
+        "count": 1
+      },
+      {
+        "date": "2024-06-30",
+        "count": 1
+      },
+      {
+        "date": "2024-07-01",
+        "count": 1
+      },
+      {
+        "date": "2024-07-04",
+        "count": 1
+      },
+      {
+        "date": "2024-07-07",
+        "count": 1
+      },
+      {
+        "date": "2024-07-09",
+        "count": 1
+      },
+      {
+        "date": "2024-07-10",
+        "count": 1
+      },
+      {
+        "date": "2024-07-11",
+        "count": 1
+      },
+      {
+        "date": "2024-07-12",
+        "count": 1
+      },
+      {
+        "date": "2024-07-14",
+        "count": 1
+      },
+      {
+        "date": "2024-07-17",
+        "count": 2
+      },
+      {
+        "date": "2024-07-19",
+        "count": 1
+      },
+      {
+        "date": "2024-07-20",
+        "count": 2
+      },
+      {
+        "date": "2024-07-21",
+        "count": 1
+      },
+      {
+        "date": "2024-07-22",
+        "count": 1
+      },
+      {
+        "date": "2024-07-26",
+        "count": 1
+      },
+      {
+        "date": "2024-07-31",
+        "count": 2
+      },
+      {
+        "date": "2024-08-01",
+        "count": 1
+      },
+      {
+        "date": "2024-08-02",
+        "count": 1
+      },
+      {
+        "date": "2024-08-06",
+        "count": 1
+      },
+      {
+        "date": "2024-08-08",
+        "count": 1
+      },
+      {
+        "date": "2024-08-09",
+        "count": 1
+      },
+      {
+        "date": "2024-08-16",
+        "count": 2
+      },
+      {
+        "date": "2024-08-19",
+        "count": 3
+      },
+      {
+        "date": "2024-08-20",
+        "count": 1
+      },
+      {
+        "date": "2024-08-21",
+        "count": 1
+      },
+      {
+        "date": "2024-08-26",
+        "count": 1
+      },
+      {
+        "date": "2024-08-29",
+        "count": 1
+      },
+      {
+        "date": "2024-08-30",
+        "count": 1
+      },
+      {
+        "date": "2024-09-02",
+        "count": 1
+      },
+      {
+        "date": "2024-09-09",
+        "count": 1
+      },
+      {
+        "date": "2024-09-10",
+        "count": 1
+      },
+      {
+        "date": "2024-09-11",
+        "count": 1
+      },
+      {
+        "date": "2024-09-12",
+        "count": 1
+      },
+      {
+        "date": "2024-09-19",
+        "count": 1
+      },
+      {
+        "date": "2024-09-20",
+        "count": 1
+      },
+      {
+        "date": "2024-09-22",
+        "count": 1
+      },
+      {
+        "date": "2024-09-26",
+        "count": 1
+      },
+      {
+        "date": "2024-09-28",
+        "count": 1
+      },
+      {
+        "date": "2024-10-03",
+        "count": 2
+      },
+      {
+        "date": "2024-10-06",
+        "count": 1
+      },
+      {
+        "date": "2024-10-09",
+        "count": 1
+      },
+      {
+        "date": "2024-10-15",
+        "count": 1
+      },
+      {
+        "date": "2024-10-16",
+        "count": 1
+      },
+      {
+        "date": "2024-10-17",
+        "count": 1
+      },
+      {
+        "date": "2024-10-18",
+        "count": 2
+      },
+      {
+        "date": "2024-10-19",
+        "count": 1
+      },
+      {
+        "date": "2024-10-27",
+        "count": 1
+      },
+      {
+        "date": "2024-10-29",
+        "count": 1
+      },
+      {
+        "date": "2024-10-30",
+        "count": 1
+      },
+      {
+        "date": "2024-11-01",
+        "count": 2
+      },
+      {
+        "date": "2024-11-02",
+        "count": 1
+      },
+      {
+        "date": "2024-11-03",
+        "count": 1
+      },
+      {
+        "date": "2024-11-05",
+        "count": 1
+      },
+      {
+        "date": "2024-11-11",
+        "count": 2
+      },
+      {
+        "date": "2024-11-13",
+        "count": 1
+      },
+      {
+        "date": "2024-11-20",
+        "count": 2
+      },
+      {
+        "date": "2024-11-21",
+        "count": 1
+      },
+      {
+        "date": "2024-11-23",
+        "count": 2
+      },
+      {
+        "date": "2024-11-25",
+        "count": 3
+      },
+      {
+        "date": "2024-12-01",
+        "count": 1
+      },
+      {
+        "date": "2024-12-02",
+        "count": 1
+      },
+      {
+        "date": "2024-12-05",
+        "count": 1
+      },
+      {
+        "date": "2024-12-10",
+        "count": 1
+      },
+      {
+        "date": "2024-12-12",
+        "count": 1
+      },
+      {
+        "date": "2024-12-15",
+        "count": 1
+      },
+      {
+        "date": "2024-12-19",
+        "count": 1
+      },
+      {
+        "date": "2024-12-24",
+        "count": 1
+      },
+      {
+        "date": "2024-12-25",
+        "count": 1
+      },
+      {
+        "date": "2024-12-28",
+        "count": 1
+      },
+      {
+        "date": "2024-12-31",
+        "count": 1
+      },
+      {
+        "date": "2025-01-02",
+        "count": 1
+      },
+      {
+        "date": "2025-01-05",
+        "count": 1
+      },
+      {
+        "date": "2025-01-09",
+        "count": 1
+      },
+      {
+        "date": "2025-01-12",
+        "count": 1
+      },
+      {
+        "date": "2025-01-13",
+        "count": 1
+      },
+      {
+        "date": "2025-01-14",
+        "count": 1
+      },
+      {
+        "date": "2025-01-16",
+        "count": 1
+      },
+      {
+        "date": "2025-01-17",
+        "count": 1
+      },
+      {
+        "date": "2025-01-19",
+        "count": 1
+      },
+      {
+        "date": "2025-01-27",
+        "count": 1
+      },
+      {
+        "date": "2025-02-03",
+        "count": 1
+      }
+    ],
+    
+
+
+    "monthly_trends": [
+      {
+        "month": "2024-02",
+        "book__genre": "Fantasy",
+        "count": 1
+      },
+      {
+        "month": "2024-02",
+        "book__genre": "Mystery",
+        "count": 2
+      },
+      {
+        "month": "2024-02",
+        "book__genre": "Non-Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-02",
+        "book__genre": "Romance",
+        "count": 2
+      },
+      {
+        "month": "2024-02",
+        "book__genre": "Technology",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Biography",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Fantasy",
+        "count": 3
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Mystery",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Programming",
+        "count": 6
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Romance",
+        "count": 1
+      },
+      {
+        "month": "2024-03",
+        "book__genre": "Technology",
+        "count": 1
+      },
+      {
+        "month": "2024-04",
+        "book__genre": "Fantasy",
+        "count": 1
+      },
+      {
+        "month": "2024-04",
+        "book__genre": "Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-04",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-04",
+        "book__genre": "Non-Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-04",
+        "book__genre": "Romance",
+        "count": 3
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Biography",
+        "count": 4
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Fantasy",
+        "count": 2
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Non-Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-05",
+        "book__genre": "Technology",
+        "count": 2
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Biography",
+        "count": 2
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Fantasy",
+        "count": 4
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Mystery",
+        "count": 1
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Non-Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-06",
+        "book__genre": "Romance",
+        "count": 2
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Biography",
+        "count": 2
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "History",
+        "count": 2
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Mystery",
+        "count": 2
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Non-Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Romance",
+        "count": 3
+      },
+      {
+        "month": "2024-07",
+        "book__genre": "Technology",
+        "count": 5
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Biography",
+        "count": 2
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Fantasy",
+        "count": 2
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "History",
+        "count": 2
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Mystery",
+        "count": 1
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Non-Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Programming",
+        "count": 3
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Romance",
+        "count": 2
+      },
+      {
+        "month": "2024-08",
+        "book__genre": "Technology",
+        "count": 1
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Biography",
+        "count": 2
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Mystery",
+        "count": 2
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Non-Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Romance",
+        "count": 2
+      },
+      {
+        "month": "2024-09",
+        "book__genre": "Technology",
+        "count": 1
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Biography",
+        "count": 4
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Fantasy",
+        "count": 2
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Romance",
+        "count": 1
+      },
+      {
+        "month": "2024-10",
+        "book__genre": "Technology",
+        "count": 3
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Biography",
+        "count": 1
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Fantasy",
+        "count": 4
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Mystery",
+        "count": 2
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Non-Fiction",
+        "count": 1
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Programming",
+        "count": 1
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Romance",
+        "count": 4
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Science",
+        "count": 1
+      },
+      {
+        "month": "2024-11",
+        "book__genre": "Technology",
+        "count": 1
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Biography",
+        "count": 2
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Fantasy",
+        "count": 1
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Fiction",
+        "count": 2
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "History",
+        "count": 1
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Mystery",
+        "count": 1
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Programming",
+        "count": 2
+      },
+      {
+        "month": "2024-12",
+        "book__genre": "Romance",
+        "count": 2
+      },
+      {
+        "month": "2025-01",
+        "book__genre": "Biography",
+        "count": 1
+      },
+      {
+        "month": "2025-01",
+        "book__genre": "Fantasy",
+        "count": 1
+      },
+      {
+        "month": "2025-01",
+        "book__genre": "Mystery",
+        "count": 3
+      },
+      {
+        "month": "2025-01",
+        "book__genre": "Romance",
+        "count": 3
+      },
+      {
+        "month": "2025-01",
+        "book__genre": "Technology",
+        "count": 2
+      },
+      {
+        "month": "2025-02",
+        "book__genre": "Fiction",
+        "count": 1
+      }
+    ]
+  }

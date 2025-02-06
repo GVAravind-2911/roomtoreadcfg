@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOME</title>
+    <link rel="icon" href="icon.png" />
+    <link rel="stylesheet" href="home1.css" />
+    <style>
+        body{
+    padding-bottom: 100px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+              <li><a href="home.html">Home</a></li>
+              <li><a href="aboutus.html">About</a></li>
+              <li><a href="table.html">Table Management</a></li>
+              <li><a href="food-menu.html">Menu</a></li>
+              <li><a href="contact.html">Contact</a></li>
+          
+              <!-- Dropdown for login selection -->
+              <li>
+                <select id="loginType" onchange="redirectLogin()">
+                    <option value="" disabled selected>Login</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <span class="arrow">&#9662;</span>
+            </li>
+          </ul>
+          
+            <a href="home.html" class="logo">
+              <img src="icon.png" alt="Logo">
+            </a>
+        </div>
+      </nav>
+    <br><br>
+    <section class="showcase-area" id="showcase">
+        <div class="showcase-container">
+            <h1 class="main-title" id="home">Eat Right Food</h1><br>
+            <p ><em>Welcome to our Restaurant Management System!
+
+                Experience seamless efficiency and elevated service with our cutting-edge platform designed to streamline every aspect of your restaurant's operations. From managing reservations and optimizing table turnover to inventory tracking and staff scheduling, our intuitive system empowers you to focus on what matters most: delivering exceptional dining experiences.
+                
+                Discover the future of restaurant management with us today!</em></p>
+            <a href="food-menu.html" class="btn btn-primary">Menu</a><br>
+            <h3>Want to book a table?<a href="table.html" class="btn btn-primary" >Book a Table</a></h3>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <h2>RS &copy; All rights reserved</h2>
+    </footer>
+</html>
+</body>
+<script>
+    document.getElementById("loginType").addEventListener("change", function() {
+        var loginType = this.value;
+    
+        if (loginType === "user") {
+            window.location.href = "index.html"; // Redirect to User Login Page
+        } else if (loginType === "admin") {
+            window.location.href = "admin.html"; // Redirect to Admin Login Page
+        }
+    });
+    </script>
+    
+</html>

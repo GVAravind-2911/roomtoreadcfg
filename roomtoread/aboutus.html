@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="home1.css" />
+    <link rel="icon" href="icon.png" />
+    <style>
+      body{
+  padding-bottom: 100px;
+      }
+      html, body {
+  height: 100%;
+}
+/* Flex container for the entire page */
+body {
+  display: flex;
+  flex-direction: column;
+}
+/* Main content wrapper */
+.main-content {
+  flex: 1; /* Takes up remaining space */
+  padding: 20px;
+  /* Optionally, add margins or other styles */
+}
+/* Footer styling */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  /* Ensure footer sticks to the bottom */
+  margin-top: auto;
+}
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="aboutus.html">About</a></li>
+                <li><a href="table.html">Table Management</a></li>
+                <li><a href="food-menu.html">Menu</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li>
+                  <select id="loginType" onchange="redirectLogin()">
+                      <option value="" disabled selected>Login</option>
+                      <option value="user">User</option>
+                      <option value="admin">Admin</option>
+                  </select>
+                  <span class="arrow">&#9662;</span>
+              </li>
+            </ul>
+            <a href="home.html" class="logo">
+              <img src="icon.png" alt="Logo">
+          </a>
+        </div>
+    </nav>
+    <section id="about">
+        <div class="about-wrapper container">
+            <div class="about-text">
+                <p class="small">About Us</p>
+                <h2>RESTAURANT SERVICES</h2><br>
+                <p>
+                  At <b style="color: red;">RS</b>, we are passionate about revolutionizing the way restaurants operate. With years of experience in the food service industry, we understand the challenges that restaurant owners face on a daily basis. 
+                  From intuitive reservation systems to seamless inventory management, we offer a comprehensive suite of software solutions designed to meet the unique needs of modern restaurants. Backed by cutting-edge technology and a commitment to excellence, we strive to be the trusted partner that helps restaurants thrive in today's competitive landscape.
+                  
+                  Discover how <b style="color: red;">RS</b> can transform your restaurant and take your business to new heights.
+                </p>
+            </div>
+            <div class="about-img">
+                <img src="https://i.postimg.cc/mgpwzmx9/about-photo.jpg" alt="food" />
+            </div>
+        </div>
+    </section>
+
+    <section class="chefs">
+        <div class="container">
+          <div class="chefs__inner">
+            <div class="intro-title">
+              <h2>Meet our members</h2>
+              <span class="descr">
+                Nice and freindly
+              </span>
+            </div>
+            <div class="chefs-cards">
+              <div class="chefs-cards__item">
+                <div class="chefs-cards__item-img">
+                  <img src="https://iare-data.s3.ap-south-1.amazonaws.com/uploads/STUDENTS/22951A6648/22951A6648.jpg">
+                  <div class="chefs-cards__item-overflow">
+                    <div class="overflow-title">
+                      We excel in intuitive reservation systems, inventory management, and staff scheduling tools, tailored for modern restaurants.
+                    </div>
+                  </div>
+                </div>
+                <div class="chefs-cards__item-info">
+                  <h3>Aiden Sharma</h3>
+                  <span class="descr">Fielder</span>
+                </div>
+              </div>
+              <div class="chefs-cards__item">
+                <div class="chefs-cards__item-img">
+                  <img src="https://iare-data.s3.ap-south-1.amazonaws.com/uploads/STUDENTS/22951A6643/22951A6643.jpg">
+                  <div class="chefs-cards__item-overflow">
+                    <div class="overflow-title">
+                      Our industry veteran, we specialize in innovative solutions for restaurant operations, enhancing customer experiences and driving growth.
+                    </div>
+                  </div>
+                </div>
+                <div class="chefs-cards__item-info">
+                  <h3>George Agarwal</h3>
+                  <span class="descr">Wiki</span>
+                </div>
+              </div>
+              <div class="chefs-cards__item">
+                <div class="chefs-cards__item-img">
+                  <img src="https://iare-data.s3.ap-south-1.amazonaws.com/uploads/STUDENTS/22951A6614/22951A6614.jpg">
+                  <div class="chefs-cards__item-overflow">
+                    <div class="overflow-title">
+                      We're committed to revolutionizing restaurant operations through cutting-edge technology and unwavering dedication to excellence.
+                    </div>
+                  </div>
+                </div>
+                <div class="chefs-cards__item-info">
+                  <h3>Suresh Dhoni</h3>
+                  <span class="descr">Bottle boy</span>
+                </div>
+              </div>
+            </div> <!--/chefs-card-->
+          </div> <!--/chefs__inner-->
+        </div> <!--/container-->
+      </section>
+
+    <footer id="footer">
+        <h2>RS &copy; all rights reserved</h2>
+    </footer>
+</body>
+<script>
+  document.getElementById("loginType").addEventListener("change", function() {
+      var loginType = this.value;
+  
+      if (loginType === "user") {
+          window.location.href = "index.html"; // Redirect to User Login Page
+      } else if (loginType === "admin") {
+          window.location.href = "admin.html"; // Redirect to Admin Login Page
+      }
+  });
+  </script>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="home1.css" />
+    <link rel="icon" href="icon.png" />
+
+    <style>
+        /* Your CSS styles */
+        /* Style for quantity inputs */
+        input[type="number"] {
+            width: 50px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        /* Style for quantity buttons */
+        .quantity-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Style for submit button */
+        button[type="button"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Style for bill table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Hide the bill section initially */
+        #bill-details {
+            display: none;
+        }
+
+        /* Center align the container */
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 20vh;
+        }
+        
+    #food-menu {
+    padding-bottom: 100px; 
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="aboutus.html">About</a></li>
+                <li><a href="table.html">Table Management</a></li>
+                <li><a href="food-menu.html">Menu</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li>
+                    <select id="loginType" onchange="redirectLogin()">
+                        <option value="" disabled selected>Login</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <span class="arrow">&#9662;</span>
+                </li>
+            </ul>
+            <a href="home.html" class="logo">
+                <img src="icon.png" alt="Logo">
+            </a>
+        </div>
+    </nav>
+    <section id="food-menu">
+        <br><br><Br>
+        <h2 class="food-menu-heading">Food Menu</h2>
+        <div class="food-menu-container container">
+            <!-- Food menu items with checkboxes -->
+            <form id="order-form">
+                <div class="food-menu-item">
+                    <div class="food-img">
+                        <img src="https://recipes.timesofindia.com/thumb/53239358.cms?imgsize=176260&width=800&height=800" alt="idli" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Idli</h2>
+                        <p>
+                            Soft, fluffy rice and lentil cake, a South Indian delicacy.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="idli-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="idli-quantity" name="idli" value="0" min="0">
+                    </div>
+                </div>
+                <div class="food-menu-item">
+                    <div class="food-img">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.O3A3BTULImI_3AYAAS_gSwHaDw&pid=Api&rs=1&c=1&qlt=95&w=235&h=119" alt="Dosa" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Dosa</h2>
+                        <p>
+                            South Indian crispy crepe made from rice and lentil batter.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="dosa-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="dosa-quantity" name="dosa" value="0" min="0">
+                    </div>
+                </div>
+                <div class="food-menu-item">
+                    <div class="food-img">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.7wCFk73XZXVcwCJ33z3ISQHaIO&pid=Api&rs=1&c=1&qlt=95&w=96&h=107" alt="vada" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Vada</h2>
+                        <p>
+                            Savory South Indian fritter, crispy on the outside, soft inside.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="item-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="vada-quantity" name="item" value="0" min="0">
+                    </div>
+                </div>
+                <div class="food-menu-item">
+                    <div class="food-img">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.RM5uayJVaEYJLgpzT6rswwHaEA&pid=Api&rs=1&c=1&qlt=95&w=184&h=99" alt="upma" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Upma</h2>
+                        <p>
+                            South Indian dish made from semolina, lightly seasoned and fluffy.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="item-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="upma-quantity" name="item" value="0" min="0">
+                    </div>
+                </div>
+                <div class="food-menu-item">
+                    <div class="food-img">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.FTP3DL5CvdZkQE_hjH5BDQHaIP&pid=Api&rs=1&c=1&qlt=95&w=91&h=102" alt="Poori" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Poori</h2>
+                        <p>
+                        Deep-fried Indian bread, puffed and golden brown, served hot.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="item-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="poori-quantity" name="item" value="0" min="0">
+                    </div>
+                </div>
+                <div class="food-menu-item">
+                    <div class="food-img">
+                    <img src="https://tse1.mm.bing.net/th?id=OIP.I7j2t-ZtIXny5xF8uFosYAHaLH&pid=Api&rs=1&c=1&qlt=95&w=77&h=115" alt="Bonda" />
+                    </div>
+                    <div class="food-description">
+                        <h2 class="food-title">Bonda</h2>
+                        <p>
+                            South Indian snack, deep-fried dumpling with spiced potato filling.
+                        </p>
+                        <p class="food-price">Price: &#8377; 250</p>
+                        <label for="item-quantity"><b>Quantity:</b></label>
+                        <input type="number" id="bonda-quantity" name="item" value="0" min="0">
+                    </div>
+                </div>
+                <!-- Add more food items here -->
+
+                <!-- Container for name input and submit button -->
+                <div class="center-container">
+                    <label for="name" style="display: inline-block; text-align: right; margin-right: 10px;">Enter your Name below:</label>
+<input type="text" id="name" name="name" required style="display: inline-block; margin-right: 10px;">
+<button type="button" onclick="calculateBill()" style="display: block; margin-top: 10px;">Submit Order</button>
+                </div>
+                
+            </form>
+        </div>
+    </section>
+
+    <section id="bill-details">
+        
+        <!-- Bill details will be displayed here -->
+    </section>
+
+    <footer id="footer">
+        <h2>RS &copy; All rights reserved</h2>
+    </footer>
+
+    <script>
+        
+        function calculateBill() {
+            const name = document.getElementById('name').value;
+    
+            const idliQuantity = parseInt(document.getElementById('idli-quantity').value);
+            const dosaQuantity = parseInt(document.getElementById('dosa-quantity').value);
+            const vadaQuantity = parseInt(document.getElementById('vada-quantity').value);
+            const upmaQuantity = parseInt(document.getElementById('upma-quantity').value);
+            const pooriQuantity = parseInt(document.getElementById('poori-quantity').value);
+            const bondaQuantity = parseInt(document.getElementById('bonda-quantity').value);
+    
+            let billDetails = `<br><br><h2><b>RS PRIVATE LTD.</b></h2><h3><br>Order Summary for <mark><i>${name}<i><mark></h3><table><tr><th>Item</th><th>Quantity</th><th>Total</th></tr>`;
+    
+            // Calculate total and include item in bill only if quantity is greater than 0
+            let totalAmount = 0;
+    
+            if (idliQuantity > 0) {
+                const idliTotal = idliQuantity * 250; // Price of Idli is assumed as 250
+                billDetails += `<tr><td>Idli</td><td>${idliQuantity}</td><td>&#8377; ${idliTotal}</td></tr>`;
+                totalAmount += idliTotal;
+            }
+            if (dosaQuantity > 0) {
+                const dosaTotal = dosaQuantity * 250; // Price of Dosa is assumed as 250
+                billDetails += `<tr><td>Dosa</td><td>${dosaQuantity}</td><td>&#8377; ${dosaTotal}</td></tr>`;
+                totalAmount += dosaTotal;
+            }
+            if (vadaQuantity > 0) {
+                const vadaTotal = vadaQuantity * 250; // Price of Vada is assumed as 250
+                billDetails += `<tr><td>Vada</td><td>${vadaQuantity}</td><td>&#8377; ${vadaTotal}</td></tr>`;
+                totalAmount += vadaTotal;
+            }
+            if (upmaQuantity > 0) {
+                const upmaTotal = upmaQuantity * 250; // Price of Upma is assumed as 250
+                billDetails += `<tr><td>Upma</td><td>${upmaQuantity}</td><td>&#8377; ${upmaTotal}</td></tr>`;
+                totalAmount += upmaTotal;
+            }
+            if (pooriQuantity > 0) {
+                const pooriTotal = pooriQuantity * 250; // Price of Poori is assumed as 250
+                billDetails += `<tr><td>Poori</td><td>${pooriQuantity}</td><td>&#8377; ${pooriTotal}</td></tr>`;
+                totalAmount += pooriTotal;
+            }
+            if (bondaQuantity > 0) {
+                const bondaTotal = bondaQuantity * 250; // Price of Bonda is assumed as 250
+                billDetails += `<tr><td>Bonda</td><td>${bondaQuantity}</td><td>&#8377; ${bondaTotal}</td></tr>`;
+                totalAmount += bondaTotal;
+            }
+    
+            billDetails += `<tr><td colspan="2">Total Amount</td><td>&#8377; ${totalAmount}</td></tr></table>`;
+    
+            document.getElementById('bill-details').innerHTML = billDetails;
+
+            // Get references to the menu and bill sections
+            const menuSection = document.getElementById('food-menu');
+            const billSection = document.getElementById('bill-details');
+            
+            // Hide the menu section
+            menuSection.style.display = 'none';
+            
+            // Show the bill section
+            billSection.style.display = 'block';
+        }
+    </script>
+    <script>
+        document.getElementById("loginType").addEventListener("change", function() {
+            var loginType = this.value;
+        
+            if (loginType === "user") {
+                window.location.href = "index.html"; // Redirect to User Login Page
+            } else if (loginType === "admin") {
+                window.location.href = "admin.html"; // Redirect to Admin Login Page
+            }
+        });
+        </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="home1.css" />
+    <link rel="icon" href="icon.png" />
+    <style>
+
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        /* Additional styles for the contact section */
+        #contact {
+            padding: 5rem 0;
+            background-color: #f0f0f0;
+        }
+    
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap-reverse; /* Reverse wrap for responsive layout */
+            justify-content: space-between;
+            align-items: flex-start; /* Align items to the top */
+        }
+    
+        .contact-img {
+            width: 100%;
+            max-width: 45%; /* Adjust as needed */
+            margin-bottom: 2rem; /* Space between sections */
+            border: 1px solid #ccc; /* Border around the map */
+            border-radius: 8px; /* Rounded corners */
+            overflow: hidden; /* Ensure border doesn't affect layout */
+        }
+    
+        .contact-img iframe {
+            width: 100%;
+            height: 400px; /* Adjust height as per your requirement */
+            border: none; /* Remove default iframe border */
+        }
+    
+        .form-container {
+            width: 100%;
+            max-width: 45%; /* Adjust as needed */
+            padding: 1rem;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: 1px solid #ccc; /* Border around the form */
+            border-radius: 8px; /* Rounded corners */
+        }
+    
+        .form-container h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+    
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+    
+        .form-container textarea {
+            resize: vertical; /* Allow vertical resizing */
+        }
+    
+        .form-container .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+    
+        .form-container .btn:hover {
+            background-color: #0056b3;
+        }
+    
+      
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="aboutus.html">About</a></li>
+                <li><a href="table.html">Table Management</a></li>
+                <li><a href="food-menu.html">Menu</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li>
+                    <select id="loginType" onchange="redirectLogin()">
+                        <option value="" disabled selected>Login</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <span class="arrow">&#9662;</span>
+                </li>
+            </ul>
+            <a href="home.html" class="logo">
+                <img src="icon.png" alt="Logo">
+            </a>
+        </div>
+    </nav>
+
+    <section id="contact">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-img">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31343.010065214574!2d78.4225123022682!3d17.581564109713565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb8ecfe1af26dd%3A0x65666fa3c4a256d2!2sInstitute%20of%20Aeronautical%20Engineering!5e0!3m2!1sen!2sin!4v1716460033321!5m2!1sen!2sin" width="600" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+    
+                <div class="form-container">
+                    <h2>Contact Us</h2>
+                    <input type="text" placeholder="Your Name" />
+                    <input type="email" placeholder="E-Mail" />
+                    <textarea cols="30" rows="6" placeholder="Type Your Message"></textarea>
+                    <a href="#" class="btn btn-primary">Submit</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <div class="container">
+            <h2>RS &copy; all rights reserved</h2>
+        </div>
+    </footer>
+</body>
+
+<script>
+    document.getElementById("loginType").addEventListener("change", function() {
+        var loginType = this.value;
+    
+        if (loginType === "user") {
+            window.location.href = "index.html"; // Redirect to User Login Page
+        } else if (loginType === "admin") {
+            window.location.href = "admin.html"; // Redirect to Admin Login Page
+        }
+    });
+    </script>
+</html>

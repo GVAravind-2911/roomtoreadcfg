@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Registration Form</title>
+  
+  <link rel="stylesheet" href="lr.css">
+  <link rel="stylesheet" href="home1.css">
+  <link rel="icon" href="icon.png" />
+
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-container container">
+        <input type="checkbox" name="" id="">
+        <div class="hamburger-lines">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+        </div>
+        <ul class="menu-items">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="table.html">Table Management</a></li>
+          <li><a href="food-menu.html">Menu</a></li>
+          <li><a href="contact.html">Contact</a></li>
+      
+          <!-- Dropdown for login selection -->
+          <li class="dropdown">
+            <select id="loginType">
+                <option value="" disabled selected>Login As</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <span class="arrow">&#9662;</span> <!-- Unicode down arrow -->
+        </li>
+        
+      </ul>
+      
+        <a href="home.html" class="logo">
+          <img src="icon.png" alt="Logo">
+        </a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <input type="checkbox" id="check">
+    <div class="login form">
+      <header>Login</header>
+      <form action="#">
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <a href="#">Forgot password?</a>
+        <input type="button" class="button" value="Login" onclick="login()">
+      </form>
+      <div class="signup">
+        <span class="signup">Don't have an account?
+         <label for="check">Signup</label>
+        </span>
+      </div>
+    </div>
+
+    <div class="registration form">
+      <header>Signup</header>
+      <form action="#">
+        <input type="email" placeholder="Enter your email" required>
+        <input type="password" placeholder="Create a password" required>
+        <input type="password" placeholder="Confirm your password" required>
+        <input type="button" class="button" value="Signup" onclick="window.location='home1.html'">
+      </form>
+      <div class="signup">
+        <span class="signup">Already have an account?
+         <label for="check">Login</label>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+    <h2>R&R &copy; All rights reserved</h2>
+  </footer>
+
+  <script>
+    document.getElementById("loginType").addEventListener("change", function() {
+        var loginType = this.value;
+    
+        if (loginType === "user") {
+            window.location.href = "index.html"; // Redirect to User Login Page
+        } else if (loginType === "admin") {
+            window.location.href = "admin.html"; // Redirect to Admin Login Page
+        }
+    });
+    </script>
+
+</body>
+</html>

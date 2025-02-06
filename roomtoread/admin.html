@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ADMIN LOGIN</title>
+    
+    <link rel="stylesheet" href="lr.css">
+    <link rel="stylesheet" href="home1.css">
+    <link rel="icon" href="icon.png" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+              <li><a href="home.html">Home</a></li>
+              <li><a href="aboutus.html">About</a></li>
+              <li><a href="table.html">Table Management</a></li>
+              <li><a href="food-menu.html">Menu</a></li>
+              <li><a href="contact.html">Contact</a></li>
+          
+              <!-- Dropdown for login selection -->
+              <li>
+                  <select id="loginType" onchange="redirectLogin()">
+                      <option value="" disabled selected>Login</option>
+                      <option value="user">User</option>
+                      <option value="admin">Admin</option>
+                  </select>
+                  <span class="arrow">&#9662;</span>
+              </li>
+          </ul>
+          
+            <a href="home.html" class="logo">
+              <img src="icon.png" alt="Logo">
+            </a>
+        </div>
+      </nav>
+  <div class="container">
+    <div class="login form">
+      <header>Admin Login</header>
+      <form action="#">
+        <input type="email" placeholder="Admin Email" required>
+        <input type="password" placeholder="Admin Password" required>
+        <a href="#">Forgot password?</a>
+        <input type="button" class="button" value="Login" onclick="window.location='admin-dashboard.html'">
+      </form>
+    </div>
+  </div>
+  <footer id="footer">
+    <h2>R&R &copy; All rights reserved</h2>
+  </footer>
+  <script>
+    document.getElementById("loginType").addEventListener("change", function() {
+        var loginType = this.value;
+    
+        if (loginType === "user") {
+            window.location.href = "index.html"; // Redirect to User Login Page
+        } else if (loginType === "admin") {
+            window.location.href = "admin.html"; // Redirect to Admin Login Page
+        }
+    });
+    </script>
+</body>
+
+</html>
