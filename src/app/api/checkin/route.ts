@@ -1,42 +1,62 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/db';
-import { books, checkouts } from '@/db/schema';
-import { eq, and, sql, isNull } from 'drizzle-orm';
+import { NextResponse } from 'next/server';
+import mysql from 'mysql2/promise';
 
-export async function POST(request: NextRequest) {
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+export async function POST(request: Request) {
+    const connection = await pool.getConnection();
+    
     try {
-        const { book_ids } = await request.json();
-        
-        // Start a transaction
-        await db.transaction(async (trx) => {
-            for (const book_id of book_ids) {
-                // Update book availability
-                await trx
-                    .update(books)
-                    .set({ availableCopies: sql`availableCopies + 1` })
-                    .where(eq(books.bookId, book_id));
+        const { bookId, userId } = await request.json();
 
-                // Update checkout status
-                await trx
-                    .update(checkouts)
-                    .set({ returnDate: new Date() })
-                    .where(
-                        and(
-                            eq(checkouts.bookId, book_id),
-                            isNull(checkouts.returnDate)
-                        )
-                    );
-            }
-        });
+        if (!bookId || !userId) {
+            return NextResponse.json(
+                { error: 'Book ID and User ID are required' },
+                { status: 400 }
+            );
+        }
 
-        return NextResponse.json({ 
-            message: 'Books checked in successfully' 
-        });
+        await connection.beginTransaction();
+
+        // Update checkout record
+        const [result] = await connection.execute(
+            `UPDATE checkouts 
+             SET return_date = CURRENT_TIMESTAMP 
+             WHERE book_id = ? AND user_id = ? AND return_date IS NULL`,
+            [bookId, userId]
+        );
+
+        // Verify if checkout record was found and updated
+        if ((result as any).affectedRows === 0) {
+            throw new Error('No active checkout found for this book and user');
+        }
+
+        // Update available copies
+        await connection.execute(
+            'UPDATE books SET available_copies = available_copies + 1 WHERE book_id = ?',
+            [bookId]
+        );
+
+        await connection.commit();
+
+        return NextResponse.json({ message: 'Book checked in successfully' });
+
     } catch (error) {
-        console.error('Check-in error:', error);
+        await connection.rollback();
+        console.error('Error checking in book:', error);
         return NextResponse.json(
-            { error: 'Failed to check in books' },
+            { error: error instanceof Error ? error.message : 'Failed to check in book' },
             { status: 500 }
         );
+    } finally {
+        connection.release();
     }
 }

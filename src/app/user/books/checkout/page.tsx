@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface Book {
@@ -18,13 +20,35 @@ interface ApiResponse {
 }
 
 export default function CheckoutPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchType, setSearchType] = useState<'title' | 'genre' | 'id'>('title');
 
+    useEffect(() => {
+        // Redirect if not authenticated
+        if (status === 'unauthenticated') {
+            router.push('/auth');
+            return;
+        }
+
+        // Only fetch books if authenticated
+        if (status === 'authenticated') {
+            fetchBooks();
+        }
+    }, [status]);
+
+    
     const handleSearch = async () => {
+        if (!searchQuery.trim()) {
+            // If search query is empty, fetch all books
+            fetchBooks();
+            return;
+        }
+
         setLoading(true);
         setError(null);
         try {
@@ -50,6 +74,7 @@ export default function CheckoutPage() {
         }
     };
 
+
     useEffect(() => {
         fetchBooks();
     }, []);
@@ -74,11 +99,15 @@ export default function CheckoutPage() {
     };
 
     const handleCheckout = async (bookId: string) => {
-        try {
-            console.log('Checking out book:', bookId);
+        if (!session?.user?.id) {
+            alert('Please log in to checkout books');
+            return;
+        }
 
+        try {
             await axios.post('/api/books/checkout', {
-                bookId: bookId
+                bookId: bookId,
+                userId: session.user.id
             });
 
             // Update the local state to reflect the change
@@ -88,6 +117,7 @@ export default function CheckoutPage() {
                     : book
             ));
 
+            // Show success message
             alert('Book checked out successfully!');
         } catch (err) {
             console.error('Checkout error:', err);
@@ -98,8 +128,7 @@ export default function CheckoutPage() {
         }
     };
 
-    // ... rest of the component remains the same ...
-    if (loading) {
+    if (status === 'loading') {
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>

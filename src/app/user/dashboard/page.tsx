@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -41,42 +43,95 @@ interface UserStats {
 }
 
 export default function DashboardPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const [history, setHistory] = useState<BookHistory[]>([]);
     const [stats, setStats] = useState<UserStats | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        Promise.all([fetchHistory(), fetchUserStats()]);
-    }, []);
+        // Redirect if not authenticated
+        if (status === 'unauthenticated') {
+            router.push('/auth');
+            return;
+        }
+
+        // Only fetch data if authenticated
+        if (status === 'authenticated' && session?.user?.id) {
+            const fetchData = async () => {
+                try {
+                    await Promise.all([
+                        fetchHistory(),
+                        fetchUserStats()
+                    ]);
+                } catch (err) {
+                    console.error('Error fetching dashboard data:', err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchData();
+        }
+    }, [status, session?.user?.id]);
 
     const fetchHistory = async () => {
         try {
             const { data } = await axios.get('/api/books/history', {
-                params: { userId: 'USER002' } // Replace with actual user ID
+                params: { userId: session?.user?.id }
             });
-            setHistory(data);
+            setHistory(Array.isArray(data) ? data : []);
         } catch (err) {
             setError(axios.isAxiosError(err)
                 ? err.response?.data?.error || err.message
                 : 'Failed to load history');
-        } finally {
-            setLoading(false);
+            throw err; // Propagate error for Promise.all
         }
     };
 
     const fetchUserStats = async () => {
         try {
             const { data } = await axios.get('/api/user/stats', {
-                params: { userId: 'USER002' }
+                params: { userId: session?.user?.id }
             });
             setStats(data);
         } catch (err) {
             console.error('Failed to fetch user stats:', err);
+            throw err; // Propagate error for Promise.all
         }
     };
 
-    if (loading) {
+    const getMonthlyReadingData = () => {
+        const now = new Date();
+        const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+        
+        // Create array of last 6 months
+        const months = Array.from({ length: 6 }, (_, i) => {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            return d.toLocaleString('default', { month: 'short' });
+        }).reverse();
+
+        // Count completed readings per month
+        const monthlyCounts = history.reduce((acc: { [key: string]: number }, item) => {
+            if (item.return_date) {
+                const returnDate = new Date(item.return_date);
+                if (returnDate >= sixMonthsAgo) {
+                    const monthKey = returnDate.toLocaleString('default', { month: 'short' });
+                    acc[monthKey] = (acc[monthKey] || 0) + 1;
+                }
+            }
+            return acc;
+        }, {});
+
+        // Map counts to months array, filling in zeros for months with no readings
+        const data = months.map(month => monthlyCounts[month] || 0);
+
+        return { months, data };
+    };
+
+    // Add loading state for session
+    if (status === 'loading') {
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -127,16 +182,41 @@ export default function DashboardPage() {
                 <div className="h-64">
                     <Bar
                         data={{
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            labels: getMonthlyReadingData().months,
                             datasets: [{
                                 label: 'Books Read',
-                                data: [4, 3, 5, 2, 4, 6],
+                                data: getMonthlyReadingData().data,
                                 backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                borderWidth: 1,
                             }]
                         }}
                         options={{
                             responsive: true,
                             maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top' as const,
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (context) => `Books: ${context.parsed.y}`
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Books'
+                                    }
+                                }
+                            }
                         }}
                     />
                 </div>

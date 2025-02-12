@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 interface AuthFormData {
     user_id: string;
@@ -24,39 +25,74 @@ const AuthPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
+    const logActivity = async (userId: string, activityType: 'login' | 'logout' | 'signup') => {
+        try {
+            await fetch('/api/user-activity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, activity_type: activityType }),
+            });
+        } catch (error) {
+            console.error('Failed to log activity:', error);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
     
         try {
-            // Validate admin code for signup
-            if (activeTab === 'signup' && formData.user_type === 'admin' && formData.admin_code !== 'ABC!@') {
-                setError('Invalid admin code');
-                setLoading(false);
-                return;
-            }
-    
-            const endpoint = activeTab === 'login' ? '/api/login' : '/api/signup';
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.error || 'Authentication failed');
-            }
-    
-            // Redirect based on user type
-            if (data.user?.user_type === 'admin') {
-                router.push('/admin/dashboard');
+            if (activeTab === 'login') {
+                const result = await signIn('credentials', {
+                    user_id: formData.user_id,
+                    password: formData.password,
+                    redirect: false,
+                });
+
+                if (result?.error) {
+                    throw new Error(result.error);
+                }
+
+                // Log login activity
+                await logActivity(formData.user_id, 'login');
+
+                // Get user role from the server
+                const userResponse = await fetch(`/api/users/${formData.user_id}`);
+                const userData = await userResponse.json();
+
+                if (!userResponse.ok) {
+                    throw new Error(userData.error);
+                }
+
+                router.push(userData.user_type === 'admin' ? '/admin/dashboard' : '/user/dashboard');
             } else {
-                router.push('user/dashboard');
+                // Handle signup
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error);
+                }
+
+                // Log signup activity
+                await logActivity(formData.user_id, 'signup');
+
+                // Automatically sign in and log login activity
+                await signIn('credentials', {
+                    user_id: formData.user_id,
+                    password: formData.password,
+                    redirect: false,
+                });
+                
+                await logActivity(formData.user_id, 'login');
+
+                router.push(formData.user_type === 'admin' ? '/admin/dashboard' : '/user/dashboard');
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
@@ -119,26 +155,6 @@ const AuthPage: React.FC = () => {
                                 />
                             </div>
                         </div>
-
-                        {activeTab === 'signup' && (
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    Name
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        id="name"
-                                        name="name"
-                                        type="text"
-                                        required={activeTab === 'signup'}
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    />
-                                </div>
-                            </div>
-                        )}
-
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
@@ -155,50 +171,73 @@ const AuthPage: React.FC = () => {
                                 />
                             </div>
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Account Type
-                            </label>
-                            <div className="mt-1 space-x-4">
-                                <label className="inline-flex items-center">
-                                    <input
-                                        type="radio"
-                                        checked={formData.user_type === 'user'}
-                                        onChange={() => setFormData({ ...formData, user_type: 'user', admin_code: '' })}
-                                        className="form-radio h-4 w-4 text-blue-600"
-                                    />
-                                    <span className="ml-2">User</span>
-                                </label>
-                                <label className="inline-flex items-center">
-                                    <input
-                                        type="radio"
-                                        checked={formData.user_type === 'admin'}
-                                        onChange={() => setFormData({ ...formData, user_type: 'admin' })}
-                                        className="form-radio h-4 w-4 text-blue-600"
-                                    />
-                                    <span className="ml-2">Admin</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        {formData.user_type === 'admin' && activeTab === 'signup' && (
-                            <div>
-                                <label htmlFor="admin_code" className="block text-sm font-medium text-gray-700">
-                                    Admin Code
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        id="admin_code"
-                                        name="admin_code"
-                                        type="password"
-                                        required
-                                        value={formData.admin_code}
-                                        onChange={(e) => setFormData({ ...formData, admin_code: e.target.value })}
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    />
+                        {activeTab === 'signup' && (
+                            <>
+                                {/* Name field */}
+                                <div>
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        Name
+                                    </label>
+                                    <div className="mt-1">
+                                        <input
+                                            id="name"
+                                            name="name"
+                                            type="text"
+                                            required={activeTab === 'signup'}
+                                            value={formData.name}
+                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+
+                                {/* Account Type - only show during signup */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Account Type
+                                    </label>
+                                    <div className="mt-1 space-x-4">
+                                        <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                checked={formData.user_type === 'user'}
+                                                onChange={() => setFormData({ ...formData, user_type: 'user', admin_code: '' })}
+                                                className="form-radio h-4 w-4 text-blue-600"
+                                            />
+                                            <span className="ml-2">User</span>
+                                        </label>
+                                        <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                checked={formData.user_type === 'admin'}
+                                                onChange={() => setFormData({ ...formData, user_type: 'admin' })}
+                                                className="form-radio h-4 w-4 text-blue-600"
+                                            />
+                                            <span className="ml-2">Admin</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Admin Code - only show during signup for admin accounts */}
+                                {formData.user_type === 'admin' && (
+                                    <div>
+                                        <label htmlFor="admin_code" className="block text-sm font-medium text-gray-700">
+                                            Admin Code
+                                        </label>
+                                        <div className="mt-1">
+                                            <input
+                                                id="admin_code"
+                                                name="admin_code"
+                                                type="password"
+                                                required
+                                                value={formData.admin_code}
+                                                onChange={(e) => setFormData({ ...formData, admin_code: e.target.value })}
+                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <div>

@@ -12,39 +12,57 @@ const pool = mysql.createPool({
 });
 
 export async function GET(request: Request) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const query = searchParams.get('query') || '';
-        const type = searchParams.get('type') || 'title'; // title, genre, or id
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('query');
+    const type = searchParams.get('type');
 
-        const connection = await pool.getConnection();
-        let sql = '';
-        let params = [];
+    if (!query || !type) {
+        return NextResponse.json({ 
+            results: [], 
+            error: 'Search query and type are required' 
+        });
+    }
+
+    const connection = await pool.getConnection();
+    
+    try {
+        let sql = `
+            SELECT 
+                book_id,
+                name,
+                author,
+                genre,
+                available_copies,
+                total_copies
+            FROM books
+            WHERE `;
 
         switch (type) {
-            case 'id':
-                sql = 'SELECT * FROM books WHERE id = ? AND available_copies > 0';
-                params = [query];
+            case 'title':
+                sql += 'name LIKE ?';
                 break;
             case 'genre':
-                sql = 'SELECT * FROM books WHERE genre LIKE ? AND available_copies > 0';
-                params = [`%${query}%`];
+                sql += 'genre LIKE ?';
                 break;
-            default: // title
-                sql = 'SELECT * FROM books WHERE name LIKE ? AND available_copies > 0';
-                params = [`%${query}%`];
+            case 'id':
+                sql += 'book_id = ?';
                 break;
+            default:
+                throw new Error('Invalid search type');
         }
 
-        const [rows] = await connection.execute(sql, params);
-        connection.release();
+        const searchValue = type === 'id' ? query : `%${query}%`;
+        const [results] = await connection.execute(sql, [searchValue]);
 
-        return NextResponse.json(rows);
+        return NextResponse.json({ results });
+
     } catch (error) {
-        console.error('Search Error:', error);
+        console.error('Search error:', error);
         return NextResponse.json(
-            { error: 'Failed to search books' },
+            { error: 'Failed to search books', results: [] },
             { status: 500 }
         );
+    } finally {
+        connection.release();
     }
 }

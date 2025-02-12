@@ -1,18 +1,29 @@
 import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Title, Tooltip } from 'chart.js';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import axios from 'axios';
 
-// Register the necessary chart.js components (Legend removed)
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 const StackedBarChart = () => {
   const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetching data from the JSON file
-    fetch('/Formated data.json')
-      .then((response) => response.json())
-      .then((data) => processData(data.monthly_trends));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/api/books/monthly-trends');
+        processData(response.data.monthly_trends);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const processData = (data) => {
@@ -29,18 +40,19 @@ const StackedBarChart = () => {
     // Create a dataset for each genre
     const datasets = genres.map((genre) => {
       const genreCounts = months.map((month) => {
-        const monthData = data.filter((item) => item.month === month && item.book__genre === genre);
-        return monthData.length > 0 ? monthData[0].count : 0;
+        const monthData = data.find(
+          (item) => item.month === month && item.book__genre === genre
+        );
+        return monthData ? monthData.count : 0;
       });
 
       return {
         label: genre,
         data: genreCounts,
-        backgroundColor: genreColors[genre], // Random color for each genre
+        backgroundColor: genreColors[genre],
       };
     });
 
-    // Setting chart data
     setChartData({
       labels: months,
       datasets: datasets,
@@ -57,38 +69,72 @@ const StackedBarChart = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Legend removed
+        display: true,
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Monthly Checkout Trends by Genre',
+        font: {
+          size: 16,
+          family: 'Poppins, sans-serif',
+        }
       },
       tooltip: {
         callbacks: {
-          // Customize the tooltip to display genre name and count
-          title: (tooltipItem) => {
-            const genre = tooltipItem[0].dataset.label;
-            const count = tooltipItem[0].raw;
-            return `${genre}: ${count}`;
-          },
-        },
-      },
+          title: (tooltipItems) => tooltipItems[0].label,
+          label: (context) => {
+            const genre = context.dataset.label;
+            const count = context.raw;
+            return `${genre}: ${count} checkouts`;
+          }
+        }
+      }
     },
     scales: {
       x: {
         stacked: true,
+        grid: {
+          display: false
+        }
       },
       y: {
         stacked: true,
-      },
-    },
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Number of Checkouts'
+        }
+      }
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500 text-center p-4">
+        Error: {error}
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center p-6">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl h-[400px]">
         {chartData ? (
           <Bar data={chartData} options={options} />
         ) : (
-          <p>Loading data...</p>
+          <p className="text-gray-500 text-center">No data available</p>
         )}
       </div>
     </div>
@@ -96,123 +142,3 @@ const StackedBarChart = () => {
 };
 
 export default StackedBarChart;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
-import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-
-// Register the necessary chart.js components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const StackedBarChart = () => {
-  const [chartData, setChartData] = useState(null);
-
-  useEffect(() => {
-    // Fetching data from the JSON file
-    fetch('/Formated data.json')
-      .then((response) => response.json())
-      .then((data) => processData(data.monthly_trends));
-  }, []);
-
-  const processData = (data) => {
-    // Extract months and genres
-    const months = [...new Set(data.map((item) => item.month))];
-    const genres = [...new Set(data.map((item) => item.book__genre))];
-
-    // Create a dataset for each genre
-    const datasets = genres.map((genre) => {
-      const genreCounts = months.map((month) => {
-        const monthData = data.filter((item) => item.month === month && item.book__genre === genre);
-        return monthData.length > 0 ? monthData[0].count : 0;
-      });
-
-      return {
-        label: genre,
-        data: genreCounts,
-        backgroundColor: getGenreColor(genre), // Custom color for each genre
-      };
-    });
-
-    // Setting chart data
-    setChartData({
-      labels: months,
-      datasets: datasets,
-    });
-  };
-
-  const getGenreColor = (genre) => {
-    // Return a color for each genre (you can adjust these colors)
-    const colors = {
-      Fantasy: 'rgba(75, 192, 192, 0.6)',
-      SciFi: 'rgba(153, 102, 255, 0.6)',
-      Mystery: 'rgba(255, 159, 64, 0.6)',
-      // Add more genres and colors as needed
-    };
-    return colors[genre] || 'rgba(255, 99, 132, 0.6)'; // Default color
-  };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        callbacks: {
-          // Customize the tooltip to display the genre and count
-          title: (tooltipItem) => {
-            const genre = tooltipItem[0].dataset.label;
-            const count = tooltipItem[0].raw;
-            return `${genre}: ${count}`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-      },
-    },
-  };
-
-  return (
-    <div className="flex justify-center items-center p-6">
-      <div className="w-full max-w-4xl">
-        {chartData ? (
-          <Bar data={chartData} options={options} />
-        ) : (
-          <p>Loading data...</p>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default StackedBarChart;
-*/

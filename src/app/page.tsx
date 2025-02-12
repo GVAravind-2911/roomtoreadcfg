@@ -90,7 +90,7 @@ const HomePage = () => {
                         <p className="text-xl text-gray-600 mb-8">Join our library today and discover a world of knowledge.</p>
                         <div className="space-x-4">
                             <Link 
-                                href="/signup" 
+                                href="/auth" 
                                 className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                             >
                                 Sign Up Now

@@ -8,51 +8,75 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
 });
 
 export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+        return NextResponse.json(
+            { error: 'User ID is required' },
+            { status: 400 }
+        );
+    }
+
+    const connection = await pool.getConnection();
+    
     try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
-
-        if (!userId) {
-            return NextResponse.json(
-                { error: 'User ID is required' },
-                { status: 400 }
-            );
-        }
-
-        const connection = await pool.getConnection();
-        
-        // Fetch user statistics
-        const [stats] = await connection.execute(`
-            SELECT 
-                COUNT(*) as total_checkouts,
-                SUM(CASE WHEN return_date IS NULL THEN 1 ELSE 0 END) as current_checkouts,
-                (
-                    SELECT genre
-                    FROM books b
-                    JOIN checkouts c ON b.book_id = c.book_id
-                    WHERE c.user_id = ?
-                    GROUP BY genre
-                    ORDER BY COUNT(*) DESC
-                    LIMIT 1
-                ) as favorite_genre,
-                SUM(CASE WHEN DATEDIFF(return_date, checkout_date) <= 14 THEN 1 ELSE 0 END) as books_returned_ontime,
-                DATEDIFF(NOW(), MIN(checkout_date)) as reading_streak
+        // Get total checkouts
+        const [totalCheckouts] = await connection.execute(`
+            SELECT COUNT(*) as total
             FROM checkouts
             WHERE user_id = ?
-        `, [userId, userId]);
+        `, [userId]);
 
-        connection.release();
-        return NextResponse.json(stats[0]);
+        // Get current checkouts
+        const [currentCheckouts] = await connection.execute(`
+            SELECT COUNT(*) as current
+            FROM checkouts
+            WHERE user_id = ? AND return_date IS NULL
+        `, [userId]);
 
+        // Get favorite genre
+        const [favoriteGenre] = await connection.execute(`
+            SELECT b.genre, COUNT(*) as count
+            FROM checkouts c
+            JOIN books b ON c.book_id = b.book_id
+            WHERE c.user_id = ?
+            GROUP BY b.genre
+            ORDER BY count DESC
+            LIMIT 1
+        `, [userId]);
+
+        // Get reading streak
+        const [streak] = await connection.execute(`
+            SELECT 
+                DATEDIFF(
+                    COALESCE(MAX(checkout_date), CURDATE()),
+                    COALESCE(MIN(checkout_date), CURDATE())
+                ) + 1 as streak
+            FROM checkouts
+            WHERE user_id = ?
+            AND checkout_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+        `, [userId]);
+
+        const stats = {
+            total_checkouts: totalCheckouts[0].total,
+            current_checkouts: currentCheckouts[0].current,
+            favorite_genre: favoriteGenre[0]?.genre || 'N/A',
+            reading_streak: streak[0].streak || 0,
+            books_returned_ontime: 0 // Add logic for this if needed
+        };
+
+        return NextResponse.json(stats);
     } catch (error) {
         console.error('Error fetching user stats:', error);
         return NextResponse.json(
             { error: 'Failed to fetch user stats' },
             { status: 500 }
         );
+    } finally {
+        connection.release();
     }
 }

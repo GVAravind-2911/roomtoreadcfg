@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface CheckedOutBook {
@@ -13,18 +15,31 @@ interface CheckedOutBook {
 }
 
 export default function CheckinPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const [books, setBooks] = useState<CheckedOutBook[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchUserCheckouts();
-    }, []);
+        // Redirect if not authenticated
+        if (status === 'unauthenticated') {
+            router.push('/auth');
+            return;
+        }
+
+        // Only fetch checkouts if authenticated
+        if (status === 'authenticated' && session.user) {
+            fetchUserCheckouts();
+        }
+    }, [status, session]);
 
     const fetchUserCheckouts = async () => {
+        if (!session?.user?.id) return;
+
         try {
             const { data } = await axios.get('/api/books/user-checkouts', {
-                params: { userId: 'USER002' } // Replace with actual user ID from session
+                params: { userId: session.user.id }
             });
             setBooks(data);
         } catch (err) {
@@ -36,11 +51,17 @@ export default function CheckinPage() {
         }
     };
 
+
     const handleCheckin = async (bookId: string) => {
+        if (!session?.user?.id) {
+            alert('Please log in to check in books');
+            return;
+        }
+
         try {
             await axios.post('/api/books/checkin', {
                 bookId,
-                userId: 'USER002' // Replace with actual user ID from session
+                userId: session.user.id
             });
 
             // Remove the checked-in book from the list
@@ -53,7 +74,7 @@ export default function CheckinPage() {
         }
     };
 
-    if (loading) {
+    if (status === 'loading') {
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
