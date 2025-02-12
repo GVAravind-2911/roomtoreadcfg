@@ -11,21 +11,24 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-
 export async function GET() {
     const connection = await pool.getConnection();
     
     try {
-        const [books] = await connection.execute<mysql.RowDataPacket[]>(
-            'SELECT * FROM books WHERE available_copies > 0'
+        const [users] = await connection.execute<mysql.RowDataPacket[]>(
+            `SELECT DISTINCT 
+                u.user_id,
+                u.name
+             FROM users u
+             ORDER BY u.name`
         );
 
-        return NextResponse.json({ results: books || [] });
+        return NextResponse.json({ users: users || [] });
 
     } catch (error) {
-        console.error('Error fetching books:', error);
+        console.error('Error fetching users:', error);
         return NextResponse.json(
-            { error: 'Failed to fetch books' },
+            { error: 'Failed to fetch users' },
             { status: 500 }
         );
     } finally {

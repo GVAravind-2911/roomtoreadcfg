@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DailySummaryCard from '@/components/admin/DailySummaryCard';
-import ActivityChart from '@/components/admin/ActivityChart';
+import ActivityCard from '@/components/admin/ActivityChart';
 
 interface DailySummary {
     checkouts: number;
@@ -54,8 +54,16 @@ const AdminDashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-xl font-semibold mb-4">Today's Activity</h2>
-                    <ActivityChart />
+                    <h2 className="text-xl font-semibold mb-4">Today&apos;s Activity</h2>
+                    <ActivityCard
+                        title="Reading Adventure"
+                        description="An exciting reading journey"
+                        imageUrl="/activities/reading.jpg"
+                        difficulty="beginner"
+                        duration={15}
+                        completionStatus={false}
+                        onClick={() => console.log('Activity clicked')}
+                    />
                 </div>
             </div>
         </div>

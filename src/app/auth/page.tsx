@@ -56,7 +56,7 @@ const AuthPage: React.FC = () => {
             if (data.user?.user_type === 'admin') {
                 router.push('/admin/dashboard');
             } else {
-                router.push('/dashboard');
+                router.push('user/dashboard');
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
