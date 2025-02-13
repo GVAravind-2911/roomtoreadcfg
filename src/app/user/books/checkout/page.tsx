@@ -19,6 +19,13 @@ interface ApiResponse {
     error?: string;
 }
 
+interface CheckoutLimits {
+    canCheckout: boolean;
+    currentCheckouts: number;
+    hasBook: boolean;
+}
+
+
 export default function CheckoutPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -27,6 +34,7 @@ export default function CheckoutPage() {
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchType, setSearchType] = useState<'title' | 'genre' | 'id'>('title');
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
     useEffect(() => {
         // Redirect if not authenticated
@@ -98,7 +106,33 @@ export default function CheckoutPage() {
         }
     };
 
-    const handleCheckout = async (bookId: string) => {
+    const checkLimits = async (userId: string, bookId: string): Promise<boolean> => {
+        try {
+            const { data } = await axios.get<CheckoutLimits>('/api/books/checkout-limits', {
+                params: { userId, bookId }
+            });
+
+            if (!data.canCheckout) {
+                if (data.hasBook) {
+                    setCheckoutError('User already has this book checked out');
+                } else if (data.currentCheckouts >= 5) {
+                    setCheckoutError('User has reached the maximum checkout limit (5 books)');
+                }
+                return false;
+            }
+
+            setCheckoutError(null);
+            return true;
+        } catch (err) {
+            setCheckoutError('Failed to verify checkout limits');
+            return false;
+        }
+    };
+
+    const handleCheckout = async (userId: string, bookId: string) => {
+        const canCheckout = await checkLimits(userId, bookId);
+        if (!canCheckout) return;
+
         if (!session?.user?.id) {
             alert('Please log in to checkout books');
             return;
@@ -173,6 +207,11 @@ export default function CheckoutPage() {
                     </button>
                 </div>
             </div>
+            {checkoutError && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                            {checkoutError}
+                        </div>
+            )}
 
             {loading ? (
                 <div className="flex justify-center items-center h-64">
@@ -198,7 +237,7 @@ export default function CheckoutPage() {
                                 Available Copies: {book.available_copies}
                             </p>
                             <button
-                                onClick={() => {console.log(book.book_id);handleCheckout(book.book_id)}}
+                                onClick={() => {console.log(book.book_id);handleCheckout(session?.user?.id || '', book.book_id)}}
                                 disabled={book.available_copies === 0}
                                 className={`w-full py-2 px-4 rounded-md ${
                                     book.available_copies > 0

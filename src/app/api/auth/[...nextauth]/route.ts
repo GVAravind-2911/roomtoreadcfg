@@ -27,7 +27,7 @@ const handler = NextAuth({
 
                 const connection = await pool.getConnection();
                 try {
-                    const [users] = await connection.execute(
+                    const [users]: any[] = await connection.execute(
                         'SELECT * FROM users WHERE user_id = ?',
                         [credentials.user_id]
                     );
@@ -66,8 +66,8 @@ const handler = NextAuth({
         },
         async session({ session, token }) {
             if (session?.user) {
-                session.user.role = token.role;
-                session.user.id = token.id;
+                session.user.role = token.role as string;
+                session.user.id = token.id as string;
             }
             return session;
         }
