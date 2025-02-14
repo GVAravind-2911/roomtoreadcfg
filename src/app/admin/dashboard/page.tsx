@@ -205,28 +205,36 @@ const AdminDashboard: React.FC = () => {
             <div className="bg-white rounded-lg shadow p-6 mt-8">
                 <h2 className="text-xl font-semibold mb-4">User Activity (Last 7 Days)</h2>
                 <div className="h-64">
-                    {stats && <Bar
-                        data={{
-                            labels: [...new Set(stats.activityTrend.map(a => a.date))],
-                            datasets: [
-                                {
-                                    label: 'Logins',
-                                    data: stats.activityTrend
-                                        .filter(a => a.activity_type === 'login')
-                                        .map(a => a.count),
-                                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                                },
-                                {
-                                    label: 'Signups',
-                                    data: stats.activityTrend
-                                        .filter(a => a.activity_type === 'signup')
-                                        .map(a => a.count),
-                                    backgroundColor: 'rgba(16, 185, 129, 0.5)',
-                                }
-                            ]
-                        }}
-                        options={chartOptions}
-                    />}
+                {stats && <Bar
+                    data={{
+                        labels: [...new Set(stats.activityTrend.map(a => a.date.split('T')[0]))].reverse(),
+                        datasets: [
+                            {
+                                label: 'Logins',
+                                data: [...new Set(stats.activityTrend.map(a => a.date))]
+                                    .reverse()
+                                    .map(date => 
+                                        stats.activityTrend
+                                            .find(a => a.date === date && a.activity_type === 'login')
+                                            ?.count || 0
+                                    ),
+                                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                            },
+                            {
+                                label: 'Signups',
+                                data: [...new Set(stats.activityTrend.map(a => a.date))]
+                                    .reverse()
+                                    .map(date => 
+                                        stats.activityTrend
+                                            .find(a => a.date === date && a.activity_type === 'signup')
+                                            ?.count || 0
+                                    ),
+                                backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                            }
+                        ]
+                    }}
+                    options={chartOptions}
+                />}
                 </div>
             </div>
         </div>

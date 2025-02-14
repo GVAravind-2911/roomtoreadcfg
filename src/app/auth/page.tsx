@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { use, useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn,useSession } from 'next-auth/react';
 
 interface AuthFormData {
     user_id: string;
@@ -14,6 +14,8 @@ interface AuthFormData {
 
 const AuthPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+    const { data: session } = useSession();
+    const [response, setResponse] = useState<any>(null);
     const [formData, setFormData] = useState<AuthFormData>({
         user_id: '',
         password: '',
@@ -24,6 +26,12 @@ const AuthPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+
+    useEffect(() => {
+        if (session) {
+            router.push(session.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard');
+        }
+    }, [session]);
 
     const logActivity = async (userId: string, activityType: 'login' | 'logout' | 'signup') => {
         try {
@@ -57,15 +65,6 @@ const AuthPage: React.FC = () => {
                 // Log login activity
                 await logActivity(formData.user_id, 'login');
 
-                // Get user role from the server
-                const userResponse = await fetch(`/api/users/${formData.user_id}`);
-                const userData = await userResponse.json();
-
-                if (!userResponse.ok) {
-                    throw new Error(userData.error);
-                }
-
-                router.push(userData.user_type === 'admin' ? '/admin/dashboard' : '/user/dashboard');
             } else {
                 // Handle signup
                 const response = await fetch('/api/signup', {
@@ -91,8 +90,6 @@ const AuthPage: React.FC = () => {
                 });
                 
                 await logActivity(formData.user_id, 'login');
-
-                router.push(formData.user_type === 'admin' ? '/admin/dashboard' : '/user/dashboard');
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
