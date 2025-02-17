@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
+import mysql, {RowDataPacket} from 'mysql2/promise';
+
+interface BookData extends RowDataPacket {
+    available_copies: number;
+}
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
         await connection.beginTransaction();
 
         // Check if book is available
-        const [books] = await connection.execute(
+        const [books] = await connection.execute<BookData[]>(
             'SELECT available_copies FROM books WHERE book_id = ? FOR UPDATE',
             [bookId]
         );

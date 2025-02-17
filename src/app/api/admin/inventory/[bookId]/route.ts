@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 // PUT - Update book details
 export async function PUT(
     request: Request,
-    { params }: { params: { bookId: string } }
+    { params }: { params: Promise<{ bookId: string }> }
 ) {
     const connection = await pool.getConnection();
     
@@ -30,7 +30,7 @@ export async function PUT(
                  genre = ?, 
                  total_copies = ?
              WHERE book_id = ?`,
-            [book.name, book.author, book.genre, book.total_copies, params.bookId]
+            [book.name, book.author, book.genre, book.total_copies, (await params).bookId]
         );
 
         await connection.commit();
@@ -55,7 +55,7 @@ export async function PUT(
 // DELETE - Remove a book
 export async function DELETE(
     request: Request,
-    { params }: { params: { bookId: string } }
+    { params }: { params: Promise<{ bookId: string }> }
 ) {
     const connection = await pool.getConnection();
     
@@ -65,7 +65,7 @@ export async function DELETE(
         // Check if book has any active checkouts
         const [checkouts] = await connection.execute<mysql.RowDataPacket[]>(
             'SELECT COUNT(*) as count FROM checkouts WHERE book_id = ? AND return_date IS NULL',
-            [params.bookId]
+            [(await params).bookId]
         );
 
         if ((checkouts[0] as { count: number }).count > 0) {
@@ -74,7 +74,7 @@ export async function DELETE(
 
         await connection.execute(
             'DELETE FROM books WHERE book_id = ?',
-            [params.bookId]
+            [(await params).bookId]
         );
 
         await connection.commit();

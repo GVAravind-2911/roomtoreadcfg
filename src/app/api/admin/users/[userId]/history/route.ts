@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 
 export async function GET(
     request: Request,
-    { params }: { params: { userId: string } }
+    { params }: { params: Promise<{ userId: string }> }
 ) {
     const userId = (await params)?.userId;
     if (!userId) {

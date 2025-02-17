@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
         `);
 
         return NextResponse.json({
-            genre_popularity: results.rows
+            genre_popularity: results
         });
     } catch (error) {
         console.error('Error fetching genre popularity:', error);

@@ -1,5 +1,32 @@
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
+import mysql, { RowDataPacket } from 'mysql2/promise';
+
+interface GenreData extends RowDataPacket {
+    book__genre: string;
+    total_checkouts: number;
+}
+
+interface DailyData extends RowDataPacket {
+    date: string;
+    count: number;
+}
+
+interface MonthlyData extends RowDataPacket {
+    month: string;
+    book__genre: string;
+    count: number;
+}
+
+interface GenreCheckouts extends RowDataPacket {
+    book__genre: string;
+    checkout_count: number;
+}
+
+interface Statistics extends RowDataPacket {
+    total_books: number;
+    active_users: number;
+    monthly_checkouts: number;
+}
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -16,7 +43,7 @@ export async function GET() {
     
     try {
         // Genre popularity data
-        const [genrePopularity] = await connection.execute(`
+        const [genrePopularity] = await connection.execute<GenreData[]>(`
             SELECT 
                 b.genre as book__genre,
                 COUNT(c.checkout_id) as total_checkouts
@@ -27,7 +54,7 @@ export async function GET() {
         `);
 
         // Daily checkouts trend
-        const [dailyCheckouts] = await connection.execute(`
+        const [dailyCheckouts] = await connection.execute<DailyData[]>(`
             SELECT 
                 DATE(checkout_date) as date,
                 COUNT(*) as count
@@ -38,7 +65,7 @@ export async function GET() {
         `);
 
         // Monthly trends by genre
-        const [monthlyTrends] = await connection.execute(`
+        const [monthlyTrends] = await connection.execute<MonthlyData[]>(`
             SELECT 
                 DATE_FORMAT(c.checkout_date, '%Y-%m') as month,
                 b.genre as book__genre,
@@ -51,7 +78,7 @@ export async function GET() {
         `);
 
         // Genre checkouts data
-        const [genreCheckouts] = await connection.execute(`
+        const [genreCheckouts] = await connection.execute<GenreCheckouts[]>(`
             SELECT 
                 b.genre as book__genre,
                 COUNT(*) as checkout_count
@@ -61,7 +88,7 @@ export async function GET() {
         `);
 
         // Additional statistics
-        const [stats] = await connection.execute(`
+        const [stats] = await connection.execute<Statistics[]>(`
             SELECT
                 (SELECT COUNT(*) FROM books) as total_books,
                 (SELECT COUNT(DISTINCT user_id) FROM user_activities 

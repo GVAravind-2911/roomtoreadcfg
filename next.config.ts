@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     DB_NAME:"codeforgood",
     DB_PORT:"3306",
   },
+  
 };
 
 export default nextConfig;

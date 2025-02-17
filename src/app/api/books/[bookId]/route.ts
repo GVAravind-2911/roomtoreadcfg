@@ -5,13 +5,13 @@ import { eq } from 'drizzle-orm';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
   try {
     const [book] = await db
       .select()
       .from(books)
-      .where(eq(books.bookId, params.bookId));
+      .where(eq(books.bookId, (await params).bookId));
 
     if (!book) {
       return NextResponse.json(
@@ -32,14 +32,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
   try {
     const updates = await request.json();
     await db
       .update(books)
       .set(updates)
-      .where(eq(books.bookId, params.bookId));
+      .where(eq(books.bookId, (await params).bookId));
 
     return NextResponse.json({ message: 'Book updated successfully' });
   } catch (error) {
@@ -53,12 +53,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
   try {
     await db
       .delete(books)
-      .where(eq(books.bookId, await (params).bookId));
+      .where(eq(books.bookId, (await params).bookId));
 
     return NextResponse.json({ message: 'Book deleted successfully' });
   } catch (error) {

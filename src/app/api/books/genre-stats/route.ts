@@ -1,5 +1,18 @@
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
+import mysql, { RowDataPacket } from 'mysql2/promise';
+
+interface GenreData extends RowDataPacket {
+    book__genre: string;
+    total_checkouts: number;
+    unique_books: number;
+    unique_readers: number;
+}
+
+interface GenreStats extends RowDataPacket {
+    book__genre: string;
+    total_books: number;
+    available_copies: number;
+}
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -16,7 +29,7 @@ export async function GET() {
     
     try {
         // Get genre popularity with checkout counts
-        const [genres] = await connection.execute(`
+        const [genres] = await connection.execute<GenreData[]>(`
             SELECT 
                 b.genre as book__genre,
                 COUNT(c.book_id) as total_checkouts,
@@ -30,7 +43,7 @@ export async function GET() {
         `);
 
         // Get total books per genre
-        const [genreStats] = await connection.execute(`
+        const [genreStats] = await connection.execute<GenreStats[]>(`
             SELECT
                 genre as book__genre,
                 SUM(total_copies) as total_books,
@@ -40,8 +53,8 @@ export async function GET() {
         `);
 
         // Combine the statistics
-        const combinedStats = genreStats.map(genre => {
-            const checkoutStats = genres.find(g => g.book__genre === genre.book__genre) || {
+        const combinedStats = (genreStats as GenreStats[]).map(genre => {
+            const checkoutStats = (genres as GenreData[]).find(g => g.book__genre === genre.book__genre) || {
                 total_checkouts: 0,
                 unique_books: 0,
                 unique_readers: 0

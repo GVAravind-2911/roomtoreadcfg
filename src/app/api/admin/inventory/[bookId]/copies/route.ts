@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 // PUT - Update book copies
 export async function PUT(
     request: Request,
-    { params }: { params: { bookId: string } }
+    { params }: { params: Promise<{ bookId: string }> }
 ) {
     const connection = await pool.getConnection();
     
@@ -30,7 +30,7 @@ export async function PUT(
                  available_copies = available_copies ${increment ? '+' : '-'} 1
              WHERE book_id = ? 
              AND (${increment} = true OR available_copies > 0)`,
-            [params.bookId]
+            [(await params).bookId]
         );
 
         if ((result as any).affectedRows === 0) {

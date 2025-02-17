@@ -1,5 +1,37 @@
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
+import mysql, { RowDataPacket, ResultSetHeader } from 'mysql2/promise';
+
+interface DailyStats extends RowDataPacket {
+    checkouts: number;
+    checkins: number;
+    activeUsers: number;
+    newSignups: number;
+    totalLogins: number;
+}
+
+interface OverallStats extends RowDataPacket {
+    totalBooks: number;
+    availableBooks: number;
+    currentCheckouts: number;
+    totalUsers: number;
+    totalSignups: number;
+}
+
+interface GenreStats extends RowDataPacket {
+    genre: string;
+    count: number;
+}
+
+interface BookStats extends RowDataPacket {
+    name: string;
+    checkouts: number;
+}
+
+interface ActivityTrend extends RowDataPacket {
+    date: string;
+    activity_type: string;
+    count: number;
+}
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -15,7 +47,7 @@ export async function GET() {
     
     try {
         // Get daily statistics
-        const [dailyStats] = await connection.execute(`
+        const [dailyStats] = await connection.execute<DailyStats[]>(`
             SELECT 
                 (SELECT COUNT(*) FROM checkouts WHERE DATE(checkout_date) = CURDATE()) as checkouts,
                 (SELECT COUNT(*) FROM checkouts WHERE DATE(return_date) = CURDATE()) as checkins,
@@ -27,8 +59,8 @@ export async function GET() {
                  WHERE DATE(timestamp) = CURDATE() AND activity_type = 'login') as totalLogins
         `);
 
-        // Get overall statistics with corrected book counts
-        const [overallStats] = await connection.execute(`
+        // Get overall statistics
+        const [overallStats] = await connection.execute<OverallStats[]>(`
             SELECT
                 (SELECT SUM(total_copies) FROM books) as totalBooks,
                 (SELECT SUM(available_copies) FROM books) as availableBooks,
@@ -38,7 +70,7 @@ export async function GET() {
         `);
 
         // Get popular genres
-        const [genres] = await connection.execute(`
+        const [genres] = await connection.execute<GenreStats[]>(`
             SELECT b.genre, COUNT(*) as count
             FROM checkouts c
             JOIN books b ON c.book_id = b.book_id
@@ -48,7 +80,7 @@ export async function GET() {
         `);
 
         // Get popular books
-        const [books] = await connection.execute(`
+        const [books] = await connection.execute<BookStats[]>(`
             SELECT b.name, COUNT(*) as checkouts
             FROM checkouts c
             JOIN books b ON c.book_id = b.book_id
@@ -58,7 +90,7 @@ export async function GET() {
         `);
 
         // Get user activity trend
-        const [activityTrend] = await connection.execute(`
+        const [activityTrend] = await connection.execute<ActivityTrend[]>(`
             SELECT 
                 DATE(timestamp) as date,
                 activity_type,
@@ -70,12 +102,8 @@ export async function GET() {
         `);
 
         return NextResponse.json({
-            daily: {
-                ...dailyStats[0],
-            },
-            overall: {
-                ...overallStats[0],
-            },
+            daily: dailyStats[0],
+            overall: overallStats[0],
             popular: {
                 genres,
                 books
